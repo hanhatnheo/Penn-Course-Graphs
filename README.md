@@ -1,1 +1,1 @@
-# Penn-Course-Graphs
+# Penn Course Graph
