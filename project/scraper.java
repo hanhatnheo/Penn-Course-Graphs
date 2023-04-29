@@ -50,7 +50,10 @@ public class scraper {
                 for (Element block : courseBlocks) {
                     if (count > 1) {
                         if (block.text().contains("Prerequisite: ")) {
-                            String prerequisites = block.text();
+                            String[] prerequisites = block.text().split(" AND");
+                            for (String prereq : prerequisites) {
+                                String[] substrings = prereq.split("(?<=\\))\\s*(AND|OR)\\s*|\\s*(AND|OR)\\s*(?=\\()|\\s+");
+                            }
                         }
                         else {
                             description = description + " " + block.text();
