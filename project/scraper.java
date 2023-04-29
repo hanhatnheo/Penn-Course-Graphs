@@ -36,7 +36,7 @@ public class scraper {
 
     public static void getCourse() {
         HashMap<String, String> subjects = getSubject();
-        
+
     }
 
     public static void main(String[] args) {
