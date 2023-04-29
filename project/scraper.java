@@ -36,6 +36,7 @@ public class scraper {
 
     public static void getCourses() {
         HashMap<String, String> subjects = getSubject();
+        JSONObject courseGraph = new JSONObject();
         for (Map.Entry<String, String> subjectEntry : subjects.entrySet()) {
             Document subject = getDocument(subjectEntry.getValue());
             Elements courses = subject.select(".courseblock");
@@ -47,13 +48,44 @@ public class scraper {
                 Elements courseBlocks = course.select(".courseblockextra");
                 String description = courseBlocks.first().text();
                 int count = 0;
+                JSONObject courseObj = new JSONObject();
+                courseObj.put("code", courseCode);
+                courseObj.put("name", courseName);
                 for (Element block : courseBlocks) {
                     if (count > 1) {
+                        boolean isAnds = false;
                         if (block.text().contains("Prerequisite: ")) {
-                            String[] prerequisites = block.text().split(" AND");
+                            String cleanedText = block.text()
+                                    .replace("Prerequisite: ", "");
+                            String[] prerequisites = cleanedText.split(" AND ");
+                            JSONObject prereqs = new JSONObject();
+                            JSONArray andArray = new JSONArray();
                             for (String prereq : prerequisites) {
-                                String[] substrings = prereq.split("(?<=\\))\\s*(AND|OR)\\s*|\\s*(AND|OR)\\s*(?=\\()|\\s+");
+                                prereq = prereq.replaceAll("or", "OR")
+                                        .replaceAll(",", "AND");
+                                if (prereq.contains("OR")) {
+                                    JSONObject orPrereqs = new JSONObject();
+                                    JSONArray orArray = new JSONArray();
+                                    String[] subStrings = prereq.split(" OR ");
+                                    for (int i = 0; i < subStrings.length; i++) {
+                                        subStrings[i] = subStrings[i].replace("(", "")
+                                                .replace(")", "");
+                                        orArray.add(subStrings[i]);
+                                    }
+                                    orPrereqs.put("OR", orArray);
+                                    andArray.add(orPrereqs);
+                                } else {
+                                    isAnds = true;
+                                    andArray.add(prereq);
+                                }
                             }
+                            if (isAnds) {
+                                prereqs.put("AND", andArray);
+                            } else {
+                                JSONObject orObj = (JSONObject) andArray.get(0);
+                                prereqs.put("OR", orObj.get("OR"));
+                            }
+                            courseObj.put("prereqs", prereqs);
                         }
                         else {
                             description = description + " " + block.text();
@@ -61,10 +93,10 @@ public class scraper {
                     }
                     count++;
                 }
-
+                courseObj.put("description", description);
+                courseGraph.put(courseCode, courseObj);
             }
         }
-
     }
 
     public static void main(String[] args) {
