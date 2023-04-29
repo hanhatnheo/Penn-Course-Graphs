@@ -34,13 +34,39 @@ public class scraper {
         return subjects;
     }
 
-    public static void getCourse() {
+    public static void getCourses() {
         HashMap<String, String> subjects = getSubject();
+        for (Map.Entry<String, String> subjectEntry : subjects.entrySet()) {
+            Document subject = getDocument(subjectEntry.getValue());
+            Elements courses = subject.select(".courseblock");
+            for (Element course : courses) {
+                String title = course.select("strong").text();
+                String[] parts = title.split("\\s+(?=[A-Z])");
+                String courseCode = parts[0];
+                String courseName = title.replace(courseCode + " ", "");
+                Elements courseBlocks = course.select(".courseblockextra");
+                String description = courseBlocks.first().text();
+                int count = 0;
+                for (Element block : courseBlocks) {
+                    if (count > 1) {
+                        if (block.text().contains("Prerequisite: ")) {
+                            String prerequisites = block.text();
+                        }
+                        else {
+                            description = description + " " + block.text();
+                        }
+                    }
+                    count++;
+                }
+
+            }
+        }
 
     }
 
     public static void main(String[] args) {
         getSubject();
+        getCourses();
     }
 
 }
