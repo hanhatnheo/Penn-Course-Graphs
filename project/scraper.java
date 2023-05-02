@@ -3,7 +3,6 @@ package project;
 import java.io.IOException;
 import java.net.URL;
 import java.util.*;
-import java.util.regex.Pattern;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -34,7 +33,7 @@ public class scraper {
         return subjects;
     }
 
-    public static void getCourses() {
+    public static JSONObject getCourses() {
         HashMap<String, String> subjects = getSubject();
         JSONObject courseGraph = new JSONObject();
         for (Map.Entry<String, String> subjectEntry : subjects.entrySet()) {
@@ -97,6 +96,12 @@ public class scraper {
                 courseGraph.put(courseCode, courseObj);
             }
         }
+        System.out.println(courseGraph);
+        return courseGraph;
+    }
+
+    public static void createGraph() {
+        JSONObject courseGraph = getCourses();
     }
 
     public static void main(String[] args) {
