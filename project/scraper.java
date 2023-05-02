@@ -3,11 +3,20 @@ package project;
 import java.io.IOException;
 import java.net.URL;
 import java.util.*;
+import java.util.function.Supplier;
+
+import org.jgrapht.generate.CompleteGraphGenerator;
+import org.jgrapht.graph.builder.GraphBuilder;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
-import org.json.simple.*;
+import org.json.*;
+import org.jgrapht.nio.json.JSONImporter;
+import org.jgrapht.Graph;
+import org.jgrapht.graph.*;
+import org.jgrapht.traverse.*;
+import org.jgrapht.util.*;
 
 public class scraper {
     public static Document getDocument(String url) {
@@ -69,13 +78,13 @@ public class scraper {
                                     for (int i = 0; i < subStrings.length; i++) {
                                         subStrings[i] = subStrings[i].replace("(", "")
                                                 .replace(")", "");
-                                        orArray.add(subStrings[i]);
+                                        orArray.put(subStrings[i]);
                                     }
                                     orPrereqs.put("OR", orArray);
-                                    andArray.add(orPrereqs);
+                                    andArray.put(orPrereqs);
                                 } else {
                                     isAnds = true;
-                                    andArray.add(prereq);
+                                    andArray.put(prereq);
                                 }
                             }
                             if (isAnds) {
@@ -96,17 +105,43 @@ public class scraper {
                 courseGraph.put(courseCode, courseObj);
             }
         }
-        System.out.println(courseGraph);
         return courseGraph;
     }
 
     public static void createGraph() {
         JSONObject courseGraph = getCourses();
+        Set<String> keys = courseGraph.keySet();
+        String[] elementNames = JSONObject.getNames(courseGraph);
+        JSONArray keyArray = courseGraph.names();
+
+        Supplier<String> vSupplier = new Supplier<String>()
+        {
+            private int id = -1;
+            @Override
+            public String get()
+            {
+                if (id < elementNames.length - 1) {
+                    id++;
+                }
+                System.out.println(id);
+                return elementNames[id];
+            }
+        };
+        Graph<String, DefaultEdge> graph = new SimpleGraph<>(vSupplier, SupplierUtil.createDefaultEdgeSupplier(), false);
+        JSONImporter<String, DefaultEdge> importer = new JSONImporter<>();
+        CompleteGraphGenerator<String, DefaultEdge> completeGenerator =
+                new CompleteGraphGenerator<>(200);
+
+        // Use the CompleteGraphGenerator object to make completeGraph a
+        // complete graph with [size] number of vertices
+        completeGenerator.generateGraph(graph);
+
     }
 
     public static void main(String[] args) {
         getSubject();
-        getCourses();
+        //getCourses();
+        createGraph();
     }
 
 }
