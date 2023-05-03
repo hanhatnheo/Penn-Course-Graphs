@@ -3,22 +3,14 @@ package project;
 import java.io.IOException;
 import java.net.URL;
 import java.util.*;
-import java.util.function.Supplier;
 
-import org.jgrapht.generate.CompleteGraphGenerator;
-import org.jgrapht.graph.builder.GraphBuilder;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 import org.json.*;
-import org.jgrapht.nio.json.JSONImporter;
-import org.jgrapht.Graph;
-import org.jgrapht.graph.*;
-import org.jgrapht.traverse.*;
-import org.jgrapht.util.*;
 
-public class scraper {
+public class Scraper {
     public static Document getDocument(String url) {
         Document document = null;
         try {
@@ -108,40 +100,34 @@ public class scraper {
         return courseGraph;
     }
 
-    public static void createGraph() {
-        JSONObject courseGraph = getCourses();
-        Set<String> keys = courseGraph.keySet();
+    public static JSONObject addSimilarity() {
+        VectorSpaceModel vectorSpace = new VectorSpaceModel();
+        ArrayList<project.Document> documents = VectorSpaceModel.getDocuments();
+        JSONObject courseGraph = Scraper.getCourses();
         String[] elementNames = JSONObject.getNames(courseGraph);
-        JSONArray keyArray = courseGraph.names();
-
-        Supplier<String> vSupplier = new Supplier<String>()
-        {
-            private int id = -1;
-            @Override
-            public String get()
-            {
-                if (id < elementNames.length - 1) {
-                    id++;
+        for (String element : elementNames) {
+            JSONObject courseSimilarity = new JSONObject();
+            project.Document query = null;
+            for (project.Document document : documents) {
+                if (document.getCourseName().equals(element)) {
+                    query = document;
                 }
-                System.out.println(id);
-                return elementNames[id];
             }
-        };
-        Graph<String, DefaultEdge> graph = new SimpleGraph<>(vSupplier, SupplierUtil.createDefaultEdgeSupplier(), false);
-        JSONImporter<String, DefaultEdge> importer = new JSONImporter<>();
-        CompleteGraphGenerator<String, DefaultEdge> completeGenerator =
-                new CompleteGraphGenerator<>(200);
-
-        // Use the CompleteGraphGenerator object to make completeGraph a
-        // complete graph with [size] number of vertices
-        completeGenerator.generateGraph(graph);
+            for (int i = 0; i < documents.size(); i++) {
+                    project.Document doc = documents.get(i);
+                    double similarScore = vectorSpace.cosineSimilarity(query, doc);
+                    if (similarScore >= 0.65) {
+                        courseSimilarity.put("similar", doc.getCourseName());
+                    }
+            }
+            courseGraph.put(element, courseSimilarity);
+        }
+        return courseGraph;
 
     }
 
     public static void main(String[] args) {
-        getSubject();
-        //getCourses();
-        createGraph();
+        addSimilarity();
     }
 
 }

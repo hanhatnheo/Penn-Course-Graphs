@@ -2,15 +2,13 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="1090452e-2b5f-4a8e-b28a-8a70c5c90819" name="Changes" comment="More scraping">
-      <change afterPath="$PROJECT_DIR$/.idea/libraries/jgrapht_core.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/libraries/jgrapht_io.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/libraries/json.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.gitignore" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/Penn-Course-Graphs.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/Penn-Course-Graphs.iml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/Penn-Course-Graphs/.idea/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Penn-Course-Graphs/.idea/.gitignore" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/Penn-Course-Graphs/.idea/Penn-Course-Graphs.iml" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Penn-Course-Graphs/.idea/Penn-Course-Graphs.iml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/project/Corpus.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/project/Document.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/project/VectorSpaceModel.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/Penn-Course-Graphs/project/scraper$1.class" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/out/production/Penn-Course-Graphs/project/scraper.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Penn-Course-Graphs/project/scraper.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/project/scraper.java" beforeDir="false" afterPath="$PROJECT_DIR$/project/scraper.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/scraper.java" beforeDir="false" afterPath="$PROJECT_DIR$/project/Scraper.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
