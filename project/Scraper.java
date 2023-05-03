@@ -42,7 +42,7 @@ public class Scraper {
             Elements courses = subject.select(".courseblock");
             for (Element course : courses) {
                 String title = course.select("strong").text();
-                String[] parts = title.split("\\s+(?=[A-Z])");
+                String[] parts = title.split("(?<=\\d)\\s");
                 String courseCode = parts[0];
                 String courseName = title.replace(courseCode + " ", "");
                 Elements courseBlocks = course.select(".courseblockextra");
