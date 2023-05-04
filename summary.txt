@@ -1,0 +1,23 @@
+Name: Penn Course Graphs
+Members: Bach Tran & Nhat-Ha Pham
+
+Description: Penn Course Graph is an application that visualizes the connection between different courses at Penn. Users can
+filter by department, and can view the graph with the courses as nodes. The courses are connected if they are similar in content,
+or if one course is another's prerequisite. Users can also search for a topic that they are interested in (for 
+instance, "machine learning" or "healthcare market") in the search bar. The application will return 5 courses that match the user's 
+query based on cosine similarity, and courses similar to each of these courses.
+
+Categories:
+- Document Search: We used jsoup to scrape Penn's course catalog, and cosine similarity (using gensim library in Python) to 
+retrieve courses with a cosine similarity larger or equal to 0.3 to a certain course. Information retrieval is also utilized 
+to return results to the search bar (return courses similar to a query).
+- Graph and graph algorithm: With the information retrieved from above, we used JavaScript and its libraries to build a
+web application that displays graph visualizations (prerequisite/similar edges connecting different courses). We also used a
+modified BFS to highlight connection between the courses when the user hovers over a certain course.
+
+Work Breakdown:
+- Document search & Web scraping to retrieve Penn's course information and organizing the data: Nhat-Ha Pham
+- Building the graph with prerequisite edges: Bach Tran
+- Modified BFS method: Bach Tran
+- Information retrieval with cosine similarity: Nhat-Ha Pham
+- Building search bar interface: Bach Tran
